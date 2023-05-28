@@ -1,0 +1,29 @@
+version: "2"
+services:
+  app:
+    depends_on:
+      - sample_db-postgresql
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - 8080:8080
+    volumes:
+      - .m2:/root/.m2
+    stdin_open: true
+    tty: true
+
+  sample_db-postgresql:
+    image: postgres:9.5
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=sample
+      - POSTGRES_USER=sample
+      - POSTGRES_DB=sample
+    volumes:
+      - sample_db:/var/lib/postgresql/data
+
+volumes:
+  sample_db:
