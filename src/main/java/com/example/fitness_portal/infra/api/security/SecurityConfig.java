@@ -16,7 +16,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.reactive.config.CorsRegistry;
 
 @Configuration
 @Slf4j
@@ -46,13 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.cors().and().authorizeRequests()
-                .antMatchers("/register").permitAll()
-                .antMatchers("/home").permitAll()
-                .antMatchers("/home").permitAll()
-                .antMatchers("/article/**").authenticated()
-                .antMatchers("/forum/**").authenticated()
-                .antMatchers("/calculators/**").authenticated();
+        http.csrf().disable().cors().and().authorizeRequests()
+                .antMatchers("/register", "/home").permitAll()
+                .antMatchers("/article/**", "/forum/**", "/calculators/**").authenticated();
         http.csrf().disable().authorizeRequests().
                 antMatchers("/login").permitAll().anyRequest().authenticated()
                 .and().exceptionHandling().and().sessionManagement()
